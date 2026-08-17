@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BSBA 4I | Tagoloan Community College</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="BSBA.png" />
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary-yellow: #ffc800;
+      --primary-hover: #e0b000;
+      --bg-dark: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    html, body {
+      width: 100vw; height: 100vh; overflow: hidden;
+      background-color: var(--bg-dark); color: var(--text-main);
+    }
+
+    .app-container {
+      display: flex; flex-direction: column; height: 100vh; width: 100vw;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.95) 100%),
+                  url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+    }
+
+    /* Navigation Header */
+    .navbar {
+      height: 70px; padding: 0 5%; display: flex; justify-content: space-between; align-items: center;
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border);
+      z-index: 1000; flex-shrink: 0;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-main); font-weight: 800; font-size: 1.25rem; }
+    .brand-logo { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 15px rgba(255, 200, 0, 0.4); }
+
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+    .nav-btn { background: transparent; border: none; color: var(--text-muted); font-weight: 600; font-size: 0.95rem; cursor: pointer; padding: 8px 16px; border-radius: 20px; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+    .nav-btn:hover, .nav-btn.active { color: #000; background: var(--primary-yellow); }
+
+    .burger-menu { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; }
+    .burger-menu span { width: 25px; height: 3px; background-color: var(--text-main); border-radius: 2px; transition: all 0.3s ease; }
+
+    .main-stage { flex: 1; position: relative; width: 100%; height: calc(100vh - 70px); overflow: hidden; }
+
+    .dimension {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 2rem 5%;
+      opacity: 0; visibility: hidden; transform: scale(0.96); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; flex-direction: column; justify-content: flex-start; overflow-y: auto;
+    }
+
+    .dimension.active { opacity: 1; visibility: visible; transform: scale(1); }
+
+    /* Home Section */
+    #dim-home { display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding-bottom: 2.5rem; }
+    .tcc-center-header { text-align: center; margin: 0.5rem auto 1rem auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .tcc-logo-link { display: inline-block; transition: transform 0.3s ease, filter 0.3s ease; cursor: pointer; }
+    .tcc-logo-link:hover { transform: scale(1.08); filter: drop-shadow(0 0 18px rgba(255, 200, 0, 0.8)); }
+    .tcc-center-logo { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255, 200, 0, 0.4)); }
+    .tcc-dept-title { font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 800; color: #ffffff; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9); max-width: 900px; line-height: 1.4; }
+    .tcc-motto { font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700; color: var(--primary-yellow); letter-spacing: 4px; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9); }
+
+    .home-grid { display: grid; grid-template-columns: 1fr 380px; gap: 2rem; max-width: 1200px; margin: auto auto 0 auto; width: 100%; align-items: flex-end; }
+    .badge { display: inline-block; padding: 6px 16px; background: rgba(255, 200, 0, 0.15); color: var(--primary-yellow); border: 1px solid rgba(255, 200, 0, 0.3); border-radius: 30px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; }
+    .hero-content h1 { font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+    .hero-content h1 span { color: var(--primary-yellow); }
+    .hero-content p { font-size: 1rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6; }
+
+    .btn-group { display: flex; gap: 1rem; }
+    .btn { padding: 0.8rem 1.6rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease; text-decoration: none; }
+    .btn-primary { background-color: var(--primary-yellow); color: #000; }
+    .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+    .btn-outline { background: rgba(255, 255, 255, 0.05); color: var(--text-main); border: 1px solid var(--glass-border); }
+    .btn-outline:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-2px); }
+
+    .schedule-notify-box { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 1.5rem; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+    .box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--glass-border); }
+    .box-header h3 { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .live-clock { font-size: 0.8rem; color: var(--primary-yellow); font-weight: 700; background: rgba(255, 200, 0, 0.15); padding: 4px 10px; border-radius: 20px; }
+
+    .today-class-item { background: rgba(15, 23, 42, 0.6); border-left: 3px solid var(--primary-yellow); border-radius: 8px; padding: 0.8rem 1rem; margin-bottom: 0.8rem; }
+    .class-time { font-size: 0.75rem; font-weight: 700; color: var(--primary-yellow); margin-bottom: 0.2rem; }
+    .class-title { font-size: 0.9rem; font-weight: 700; }
+    .class-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; display: flex; justify-content: space-between; }
+    .no-class-msg { text-align: center; color: var(--text-muted); padding: 1.5rem 0; font-size: 0.9rem; }
+
+    .dimension-header-wrap { display: flex; justify-content: space-between; align-items: flex-end; max-width: 1100px; margin: 0 auto 1.5rem auto; width: 100%; }
+    .dimension-header-text h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.2rem; }
+    .dimension-header-text p { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* Tabs Bar */
+    .semester-tabs { display: flex; gap: 10px; margin-bottom: 1.2rem; max-width: 1100px; margin-left: auto; margin-right: auto; width: 100%; }
+    .sem-tab-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: var(--text-muted); padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: all 0.3s ease; }
+    .sem-tab-btn.active { background: var(--primary-yellow); color: #000; border-color: var(--primary-yellow); }
+
+    .btn-mix { background: var(--primary-yellow); color: #000; border: none; padding: 0.65rem 1.4rem; border-radius: 30px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(255, 200, 0, 0.3); transition: all 0.3s ease; }
+    .btn-mix:hover { background-color: var(--primary-hover); transform: translateY(-2px) scale(1.03); }
+
+    /* Activity Cards */
+    .activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.2rem; max-width: 1200px; margin: 0 auto; width: 100%; max-height: 70vh; overflow-y: auto; padding-right: 5px; }
+    .card { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.3rem; backdrop-filter: blur(10px); transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
+    .card:hover { transform: translateY(-4px); border-color: var(--primary-yellow); box-shadow: 0 10px 25px rgba(255, 200, 0, 0.15); }
+    .subject-code { font-size: 0.75rem; font-weight: 800; color: var(--primary-yellow); background: rgba(255, 200, 0, 0.1); padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 0.6rem; width: fit-content; }
+    .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .card-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; margin-bottom: 1rem; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--glass-border); padding-top: 0.8rem; }
+    .instructor-tag { font-size: 0.8rem; color: #e2e8f0; font-weight: 600; }
+    .view-btn-text { font-size: 0.75rem; color: var(--primary-yellow); font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+    /* Header Photo Slideshow */
+    .album-slideshow-container { position: relative; max-width: 1100px; width: 100%; height: 300px; margin: 0 auto 1.5rem auto; border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); background: var(--card-bg); flex-shrink: 0; }
+    .album-slide { display: none; width: 100%; height: 100%; position: relative; }
+    .album-slide.active { display: block; }
+    .album-slide img { width: 100%; height: 100%; object-fit: cover; }
+    .album-slide-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem 2rem; background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.95) 100%); color: var(--text-main); }
+    .album-slide-caption h4 { font-size: 1.25rem; font-weight: 800; color: var(--primary-yellow); }
+    .album-slide-caption p { font-size: 0.85rem; color: var(--text-muted); }
+
+    .slide-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 23, 42, 0.7); border: 1px solid var(--glass-border); color: var(--text-main); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: all 0.3s ease; }
+    .slide-btn:hover { background: var(--primary-yellow); color: #000; }
+    .slide-prev { left: 15px; } .slide-next { right: 15px; }
+
+    .slide-indicators { position: absolute; bottom: 12px; right: 20px; display: flex; gap: 8px; z-index: 10; }
+    .slide-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); cursor: pointer; transition: all 0.3s ease; }
+    .slide-dot.active { background: var(--primary-yellow); width: 24px; border-radius: 10px; }
+
+    /* Student Cards Grid */
+    .alumni-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; width: 100%; padding-bottom: 2rem; }
+    
+    .alumni-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .alumni-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--primary-yellow);
+      box-shadow: 0 12px 30px rgba(255, 200, 0, 0.2);
+    }
+
+    .alumni-avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-yellow); background-color: #1e293b; margin-bottom: 1rem; }
+    .alumni-name { font-size: 1rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.3rem; }
+    .alumni-role { font-size: 0.8rem; color: var(--primary-yellow); font-weight: 600; margin-bottom: 1rem; }
+    
+    .expand-btn {
+      margin-top: auto;
+      background: rgba(255, 200, 0, 0.15);
+      border: 1px solid rgba(255, 200, 0, 0.3);
+      color: var(--primary-yellow);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .alumni-card:hover .expand-btn {
+      background: var(--primary-yellow);
+      color: #000;
+    }
+
+    /* Student Portal Tri-Grid */
+    .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 2rem auto; width: 100%; }
+    .portal-card { background: var(--card-bg); padding: 2.2rem; border-radius: 20px; border: 1px solid var(--glass-border); text-align: center; backdrop-filter: blur(10px); transition: transform 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+    .portal-card:hover { transform: translateY(-5px); border-color: var(--primary-yellow); }
+
+    /* Split Button Container */
+    .portal-btn-group { display: flex; gap: 0.8rem; width: 100%; justify-content: center; }
+    .portal-btn-group .btn { flex: 1; justify-content: center; font-size: 0.8rem; padding: 0.7rem 0.8rem; }
+
+    /* Modals & Media Lightbox */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; padding: 1.5rem; }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-box { background: #1e293b; border: 1px solid var(--glass-border); border-radius: 24px; max-width: 750px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7); transform: scale(0.9); transition: transform 0.3s ease; }
+    .modal-overlay.active .modal-box { transform: scale(1); }
+    .modal-header { padding: 1.2rem 1.8rem; background: rgba(15, 23, 42, 0.9); border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h3 { font-size: 1.25rem; font-weight: 800; color: var(--text-main); }
+    .close-modal-btn { background: transparent; border: none; color: var(--text-muted); font-size: 1.6rem; cursor: pointer; transition: color 0.2s; }
+    .close-modal-btn:hover { color: var(--primary-yellow); }
+    .modal-body { padding: 1.8rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    /* Large Student Pop-up Specific Styling */
+    .student-popup-header { display: flex; gap: 1.5rem; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 1.2rem; }
+    .student-popup-avatar { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-yellow); flex-shrink: 0; }
+    .student-popup-meta h2 { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .student-popup-meta p { font-size: 0.9rem; color: var(--primary-yellow); font-weight: 600; margin-bottom: 8px; }
+    
+    .popup-info-group { display: flex; flex-direction: column; gap: 4px; }
+    .popup-info-label { font-size: 0.75rem; font-weight: 800; color: var(--primary-yellow); text-transform: uppercase; letter-spacing: 0.8px; }
+    .popup-info-value { font-size: 1rem; color: var(--text-main); line-height: 1.5; font-style: italic; background: rgba(15, 23, 42, 0.5); padding: 12px 16px; border-radius: 12px; border-left: 3px solid var(--primary-yellow); }
+
+    .media-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 0.5rem; }
+    .media-gallery img, .media-gallery video { width: 100%; height: 150px; object-fit: cover; border-radius: 12px; border: 1px solid var(--glass-border); transition: transform 0.3s ease, border-color 0.3s ease; cursor: pointer; }
+    .media-gallery audio { width: 100%; margin-top: 0.5rem; border-radius: 8px; }
+    .media-gallery img:hover, .media-gallery video:hover { transform: scale(1.04); border-color: var(--primary-yellow); }
+
+    .audio-card { background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 6px; }
+    .audio-card label { font-size: 0.75rem; color: var(--primary-yellow); font-weight: 700; }
+
+    /* Image Lightbox Preview */
+    .lightbox-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(20px); z-index: 3000; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+    .lightbox-overlay.active { opacity: 1; visibility: visible; }
+    .lightbox-img { max-width: 90vw; max-height: 80vh; border-radius: 12px; border: 2px solid var(--primary-yellow); box-shadow: 0 0 30px rgba(0,0,0,0.8); object-fit: contain; }
+    .lightbox-caption { color: var(--text-main); font-size: 1rem; font-weight: 700; margin-top: 1rem; }
+
+    .schedule-wrap { max-width: 1100px; margin: 0 auto; width: 100%; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; backdrop-filter: blur(10px); }
+    .schedule-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .schedule-table th, .schedule-table td { padding: 1rem 1.2rem; border-bottom: 1px solid var(--glass-border); font-size: 0.9rem; }
+    .schedule-table th { background: rgba(15, 23, 42, 0.8); color: var(--primary-yellow); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+    .schedule-table tr:hover { background: rgba(255, 255, 255, 0.03); }
+    .room-badge { background: rgba(255, 255, 255, 0.1); padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; color: var(--primary-yellow); }
+
+    @media (max-width: 900px) {
+      .home-grid { grid-template-columns: 1fr; }
+      .dimension-header-wrap { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .burger-menu { display: flex; }
+      .nav-links { position: fixed; top: 0; right: -100%; width: 75%; max-width: 280px; height: 100vh; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); flex-direction: column; justify-content: center; align-items: stretch; padding: 2rem; gap: 1rem; transition: right 0.4s ease; border-left: 1px solid var(--glass-border); }
+      .nav-links.active { right: 0; }
+      .nav-btn { justify-content: center; padding: 12px; }
+      .burger-menu.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+      .burger-menu.active span:nth-child(2) { opacity: 0; }
+      .burger-menu.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+      .schedule-wrap { overflow-x: auto; }
+      .album-slideshow-container { height: 220px; }
+      .student-popup-header { flex-direction: column; text-align: center; }
+      .portal-btn-group { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="#" class="brand">
+        <img src="BSBA.png" alt="BSBA Logo" class="brand-logo" />
+        <span>BSBA 4I | TCC</span>
+      </a>
+
+      <div class="burger-menu" id="burgerMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+        <li><button class="nav-btn active" onclick="switchDimension('dim-home', this)"><i class="fa-solid fa-house"></i> Home</button></li>
+        <li><button class="nav-btn" onclick="switchDimension('dim-activities', this)"><i class="fa-solid fa-list-check"></i> Activities</button></li>
+        <li><button class="nav-btn" onclick="switchDimension('dim-alumni', this)"><i class="fa-solid fa-user-graduate"></i> Class Album</button></li>
+        <li><button class="nav-btn" onclick="switchDimension('dim-schedule', this)"><i class="fa-solid fa-calendar-days"></i> Schedule</button></li>
+        <li><button class="nav-btn" onclick="switchDimension('dim-portal', this)"><i class="fa-solid fa-graduation-cap"></i> Student Portal</button></li>
+      </ul>
+    </nav>
+
+    <!-- Main Stage -->
+    <main class="main-stage">
+      
+      <!-- HOME DIMENSION -->
+      <section id="dim-home" class="dimension active">
+        <div class="tcc-center-header">
+          <a href="https://tcc.edu.ph/" target="_blank" rel="noopener noreferrer" class="tcc-logo-link" title="Visit Tagoloan Community College Official Website">
+            <img src="TCC1.png" alt="TCC Logo" class="tcc-center-logo" />
+          </a>
+          <h2 class="tcc-dept-title">BACHELOR OF SCIENCE BUSINESS ADMINISTRATION MAJOR IN FINANCIAL MANAGEMENT</h2>
+          <p class="tcc-motto">VINCENT OMNIA VERITAS</p>
+        </div>
+
+        <div class="home-grid">
+          <div class="hero-content">
+            <span class="badge">Academic Year 2026–2027</span>
+            <h1>Vision · Mission ·  <span>Goals</span></h1>
+            <p>Vision: To be a premiere community-based institution by 2030 producing globally competent graduates.</p>
+            <p>Mission: Tagoloan Community College is committed to produce competent graduates fully equipped with knowledge and skills driven by values conforming to global standards.</p>
+            <div class="btn-group">
+              <button class="btn btn-primary" onclick="switchDimension('dim-activities', document.querySelectorAll('.nav-btn')[1])">
+                Explore Activities <i class="fa-solid fa-arrow-right"></i>
+              </button>
+              <button class="btn btn-outline" onclick="switchDimension('dim-portal', document.querySelectorAll('.nav-btn')[4])">
+                <i class="fa-solid fa-graduation-cap"></i> Portal
+              </button>
+            </div>
+          </div>
+
+          <div class="schedule-notify-box">
+            <div class="box-header">
+              <h3><i class="fa-solid fa-bell" style="color: var(--primary-yellow);"></i> Today's Schedule</h3>
+              <div class="live-clock" id="liveClock">00:00:00</div>
+            </div>
+            <div id="todayScheduleList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACTIVITIES PORTFOLIO DIMENSION -->
+      <section id="dim-activities" class="dimension">
+        <div class="dimension-header-wrap">
+          <div class="dimension-header-text">
+            <h2>BSBA 4I Subject Activities</h2>
+            <p>Select a semester tab and click any activity card to view uploaded PNG, JPG, MP4, and WAV media files.</p>
+          </div>
+
+          <button class="btn-mix" onclick="mixActivities()">
+            <i class="fa-solid fa-shuffle"></i> Mix Activities
+          </button>
+        </div>
+
+        <!-- Semester Filter Tabs -->
+        <div class="semester-tabs">
+          <button class="sem-tab-btn active" onclick="switchActivitySemester(1, this)">1st Semester</button>
+          <button class="sem-tab-btn" onclick="switchActivitySemester(2, this)">2nd Semester</button>
+        </div>
+
+        <div class="activities-grid" id="activitiesGrid"></div>
+      </section>
+
+      <!-- ALUMNI ALBUM DIMENSION -->
+      <section id="dim-alumni" class="dimension">
+        <div class="dimension-header-wrap">
+          <div class="dimension-header-text">
+            <h2>Class 4I Directory & Album</h2>
+            <p>Click any student profile box to expand a larger view of their graduation statement, ambition, and PNG/JPG memory photos.</p>
+          </div>
+        </div>
+
+        <!-- Header Photo Slideshow -->
+        <div class="album-slideshow-container">
+          <div class="album-slide active">
+            <img src="memory1.jpg" alt="Class Memory 1" onerror="this.src='https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1200&auto=format&fit=crop'" onclick="popImage(this.src, 'Class Memory')" />
+            <div class="album-slide-caption">
+              <h4>Class of 2026-2027 Academic Summit</h4>
+              <p>Tagoloan Community College Business Administration Assembly</p>
+            </div>
+          </div>
+
+          <div class="album-slide">
+            <img src="memory2.png" alt="Class Memory 2" onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop'" onclick="popImage(this.src, 'Team Building')" />
+            <div class="album-slide-caption">
+              <h4>Financial Managers Team Building</h4>
+              <p>Strengthening leadership, collaboration, and financial mastery</p>
+            </div>
+          </div>
+
+          <div class="album-slide">
+            <img src="memory3.jpg" alt="Class Memory 3" onerror="this.src='https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop'" onclick="popImage(this.src, 'Case Presentation')" />
+            <div class="album-slide-caption">
+              <h4>Research & Case Presentation</h4>
+              <p>Presenting strategic solutions and corporate financial forecasts</p>
+            </div>
+          </div>
+
+          <button class="slide-btn slide-prev" onclick="moveSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="slide-btn slide-next" onclick="moveSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+
+          <div class="slide-indicators">
+            <span class="slide-dot active" onclick="setSlide(0)"></span>
+            <span class="slide-dot" onclick="setSlide(1)"></span>
+            <span class="slide-dot" onclick="setSlide(2)"></span>
+          </div>
+        </div>
+
+        <!-- ALUMNI CARDS GRID -->
+        <div class="alumni-grid"></div>
+      </section>
+
+      <!-- SCHEDULE DIMENSION -->
+      <section id="dim-schedule" class="dimension">
+        <div class="dimension-header-wrap">
+          <div class="dimension-header-text">
+            <h2>Official Class Schedule</h2>
+            <p>BSBA Section 4I Timetable & Room Assignments</p>
+          </div>
+        </div>
+
+        <div class="semester-tabs">
+          <button class="sem-tab-btn active" onclick="showScheduleSemester(1, this)">1st Semester</button>
+          <button class="sem-tab-btn" onclick="showScheduleSemester(2, this)">2nd Semester</button>
+        </div>
+
+        <div class="schedule-wrap" id="scheduleWrap"></div>
+      </section>
+
+      <!-- STUDENT PORTAL DIMENSION -->
+      <section id="dim-portal" class="dimension">
+        <div class="dimension-header-wrap">
+          <div class="dimension-header-text">
+            <h2>Student Portal & Merch Store</h2>
+            <p>Tagoloan Community College Official Systems & Class Goods</p>
+          </div>
+        </div>
+
+        <div class="portal-grid">
+          <!-- Official Academic Portal Card -->
+          <div class="portal-card">
+            <div>
+              <i class="fa-solid fa-school" style="font-size: 2.8rem; color: var(--primary-yellow); margin-bottom: 1rem;"></i>
+              <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Official Academic Portal</h3>
+              <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                Access your official grades, enrollment records, subject lists, and administrative services through the Tagoloan Community College portal.
+              </p>
+            </div>
+            <a href="https://link.tcc.edu.ph/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; justify-content: center;">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Portal (link.tcc.edu.ph)
+            </a>
+          </div>
+
+          <!-- Alumni Merch Card -->
+          <div class="portal-card">
+            <div>
+              <i class="fa-solid fa-shirt" style="font-size: 2.8rem; color: var(--primary-yellow); margin-bottom: 1rem;"></i>
+              <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">BSBA 4I Alumni Merch</h3>
+              <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                Official class apparel, memorabilia, and batch tokens. Order links and catalog will be available here soon.
+              </p>
+            </div>
+            <button class="btn btn-outline" style="width: 100%; justify-content: center; cursor: not-allowed; opacity: 0.6;" disabled>
+              <i class="fa-solid fa-basket-shopping"></i> Order Links Coming Soon
+            </button>
+          </div>
+
+          <!-- Official Signet Ring Card -->
+          <div class="portal-card">
+            <div>
+              <i class="fa-solid fa-ring" style="font-size: 2.8rem; color: var(--primary-yellow); margin-bottom: 1rem;"></i>
+              <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Official Signet Ring</h3>
+              <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                Custom BSBA Financial Management graduation signet rings. Sizing guides, custom engraving details, and pre-order links coming soon.
+              </p>
+            </div>
+            <div class="portal-btn-group">
+              <button class="btn btn-primary" onclick="openRingDesigns()">
+                <i class="fa-solid fa-gem"></i> View Design
+              </button>
+              <button class="btn btn-outline" style="cursor: not-allowed; opacity: 0.6;" disabled>
+                <i class="fa-solid fa-clock"></i> Open Soon
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MAIN POP-UP MODAL (FOR LARGE STUDENT DETAILS AND ACTIVITY MEDIA) -->
+  <div class="modal-overlay" id="mainModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">Details</h3>
+        <button class="close-modal-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- PHOTO LIGHTBOX MODAL (FOR FULLSCREEN IMAGE PREVIEWS) -->
+  <div class="lightbox-overlay" id="imageLightbox" onclick="closeLightbox()">
+    <img id="lightboxTargetImg" class="lightbox-img" src="" alt="Full Preview" />
+    <div id="lightboxCaption" class="lightbox-caption"></div>
+    <span style="color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;"><i class="fa-solid fa-xmark"></i> Click anywhere to close</span>
+  </div>
+
+  <script>
+    // Schedule Data
+    const sem1Schedule = [
+      { code: 'PMC 401', title: 'Financial Analysis & Reporting', days: 'Tue/Thu', time: '04:00-05:30 PM', room: '8-206', units: 3, instructor: 'Balgoa, Desiree' },
+      { code: 'PMC 402', title: 'Special Topics in Financial Management', days: 'Mon/Wed', time: '04:00-05:30 PM', room: '8-206', units: 3, instructor: 'Hayag, Juvelyn' },
+      { code: 'ELEC 403', title: 'Mutual Fund', days: 'Fri/Sat', time: '11:30-01:00 PM', room: '8-201', units: 3, instructor: 'Salas, Leopoldo' },
+      { code: 'PMC 404', title: 'Credit and Collection', days: 'Mon/Wed', time: '05:30-07:00 PM', room: '8-206', units: 3, instructor: 'Agustin, Joshua Dominique' },
+      { code: 'PMC 403', title: 'Banking and Financial Institutions', days: 'Sat', time: '07:00-10:00 AM', room: 'TBA', units: 3, instructor: 'Fuentes, Jimbo' },
+      { code: 'ELEC 404', title: 'Risk Management', days: 'Tue/Thu', time: '05:30-07:00 PM', room: '8-206', units: 3, instructor: 'Pastrana, Rene' },
+      { code: 'ELEC 402', title: 'Cooperative Management', days: 'Fri/Sat', time: '02:30-04:00 PM', room: '8-201', units: 3, instructor: 'Salvane, Adel' }
+    ];
+
+    // Activities Master Data with format support: PNG, JPG, MP4, WAV
+    let currentActivitySem = 1;
+    let activitiesData = [
+      {
+        id: 1, sem: 1, code: 'PMC 401', title: 'Financial Analysis & Reporting',
+        desc: 'Financial statements interpretation, ratio analysis, and corporate performance reporting.',
+        instructor: 'Balgoa, Desiree',
+        photos: ['activity1_1.jpg', 'activity1_2.png'],
+        videos: ['activity1_presentation.mp4'],
+        audios: ['activity1_audio.wav']
+      },
+      {
+        id: 2, sem: 1, code: 'PMC 402', title: 'Special Topics in Financial Management',
+        desc: 'Advanced corporate strategies, valuation techniques, and contemporary financial management trends.',
+        instructor: 'Hayag, Juvelyn',
+        photos: ['activity2_1.jpg', 'activity2_2.png'],
+        videos: ['activity2_recap.mp4'],
+        audios: ['activity2_podcast.wav']
+      },
+      {
+        id: 3, sem: 1, code: 'ELEC 403', title: 'Mutual Fund Management',
+        desc: 'Investment portfolio management, asset allocation, and mutual fund operations analysis.',
+        instructor: 'Salas, Leopoldo',
+        photos: ['activity3_1.png', 'activity3_2.jpg'],
+        videos: [],
+        audios: ['activity3_lecture.wav']
+      },
+      {
+        id: 4, sem: 1, code: 'PMC 404', title: 'Credit and Collection Case Study',
+        desc: 'Credit evaluation frameworks, risk mitigation, and corporate collection strategies.',
+        instructor: 'Agustin, Joshua Dominique',
+        photos: ['activity4_1.jpg'],
+        videos: ['activity4_roleplay.mp4'],
+        audios: []
+      }
+    ];
+
+    // Alumni Student Roster with PNG and JPG Memory Photo formats
+    const alumniList = [
+      { id: 1, name: "ABATAYO, Joseph Albert B.", facebook: "https://facebook.com/jsephalbert18", dob: "2002-05-14", statement: "Success is built on persistence and unyielding faith.", ambition: "Certified Financial Analyst", photo: "joseph.png", memories: ["joseph_memory1.jpg", "joseph_memory2.png"] },
+      { id: 2, name: "AMTO, Janelyka Z.", facebook: "https://facebook.com/jane.amto", dob: "2003-01-20", statement: "Lead with integrity and courage.", ambition: "Corporate Financial Controller", photo: "janelyka.png", memories: ["janelyka_memory1.png", "janelyka_memory2.jpg"] },
+      { id: 3, name: "ARBAN, Khent Mark S.", facebook: "https://facebook.com/search/top?q=Kenn%20Arban", dob: "2002-09-11", statement: "Strive for excellence in everything.", ambition: "Investment Banker", photo: "khent.png", memories: ["khent_memory1.jpg", "khent_memory2.png"] },
+      { id: 4, name: "ARBAN, Paul John E.", facebook: "https://facebook.com/paul.arban.395", dob: "2002-03-15", statement: "Keep moving forward against all odds.", ambition: "Risk Operations Manager", photo: "pauljohn.png", memories: ["paul_memory1.png", "paul_memory2.jpg"] },
+      { id: 5, name: "AWITIN, April Adellyn L.", facebook: "https://facebook.com/april.awitin.5", dob: "2003-04-02", statement: "Dream big, execute with precision.", ambition: "Portfolio Manager", photo: "april.png", memories: ["april_memory1.jpg", "april_memory2.png"] },
+      { id: 6, name: "BAGONGON, Cristine P.", facebook: "https://facebook.com/cristine45", dob: "2002-11-28", statement: "Integrity is doing the right thing.", ambition: "Financial Auditor", photo: "cristine.png", memories: ["cristine_memory1.png"] },
+      { id: 7, name: "BALBUTIN, Angel E.", facebook: "https://facebook.com/injelmiy.balbutin", dob: "2003-02-14", statement: "Every detail matters in finance.", ambition: "Chief Financial Officer", photo: "angel.png", memories: ["angel_memory1.jpg"] },
+      { id: 8, name: "BARING, Maria Trisha Jane P.", facebook: "https://facebook.com/mariatrishajane.baring.5", dob: "2002-07-08", statement: "Embrace challenges as opportunities.", ambition: "Bank Branch Manager", photo: "maria.png", memories: ["maria_memory1.png"] },
+      { id: 9, name: "BAYKING, Chrislyn S.", facebook: "https://facebook.com/reyan.sano.7", dob: "2003-08-19", statement: "Learn continually to lead effectively.", ambition: "Treasury Specialist", photo: "chrislyn.png", memories: ["chrislyn_memory1.jpg"] },
+      { id: 10, name: "BERMUDO, Kyle Nathaniel L.", facebook: "https://facebook.com/kyle.bermudo.2024", dob: "2002-12-05", statement: "Strategy without execution is aimless.", ambition: "Financial Consultant", photo: "kyle.png", memories: ["kyle_memory1.jpg"] },
+      { id: 11, name: "BUCAY, Cristine June D.", facebook: "https://facebook.com/cristine.june.bucay", dob: "2003-06-12", statement: "Focus on purpose over perfection.", ambition: "Credit Risk Analyst", photo: "cristine.png", memories: ["cristine_june_memory1.png"] },
+      { id: 12, name: "BUTALID, Jenny Vieve L.", facebook: "https://facebook.com/vieve.butalid", dob: "2002-10-30", statement: "Determination defines your path.", ambition: "Corporate Treasurer", photo: "jenny.png", memories: ["jenny_memory1.jpg"] },
+      { id: 13, name: "CABALIDA, Trixcy P.", facebook: "https://facebook.com/trixcy22405", dob: "2003-03-25", statement: "Knowledge is the greatest asset.", ambition: "Mutual Fund Specialist", photo: "trixcy.png", memories: ["trixcy_memory1.png"] },
+      { id: 14, name: "CABALUNA, Jordan M.", facebook: "https://facebook.com/jordan.manacap.cabaluna", dob: "2002-04-17", statement: "Work hard in silence, let success make noise.", ambition: "Fintech Entrepreneur", photo: "jordan.png", memories: ["jordan_memory1.jpg"] },
+      { id: 15, name: "CABANDAY, Yourie A.", facebook: "https://facebook.com/yourie.cabanday.1213", dob: "2003-09-09", statement: "Stay hungry, stay humble.", ambition: "Wealth Manager", photo: "yourie.png", memories: ["yourie_memory1.png"] },
+      { id: 16, name: "CACULBA, Ethyl Mae C.", facebook: "https://facebook.com/ethylmae.caculba.5", dob: "2002-01-15", statement: "Excellence is a habitual discipline.", ambition: "Tax & Financial Adviser", photo: "ethyl.png", memories: ["ethyl_memory1.jpg"] },
+      { id: 17, name: "CAGATA, Raycel Shaine F.", facebook: "https://facebook.com/shainecel.atagac", dob: "2003-05-22", statement: "Transform vision into reality.", ambition: "Asset Management Director", photo: "raycel.png", memories: ["raycel_memory1.png"] },
+      { id: 18, name: "CALEBAY, Jaylou L.", facebook: "https://facebook.com/JayLoyzx", dob: "2002-08-14", statement: "Action speaks louder than intention.", ambition: "Hedge Fund Analyst", photo: "jaylou.png", memories: ["jaylou_memory1.jpg"] },
+      { id: 19, name: "CANEDO, Cielo M.", facebook: "https://facebook.com/cielo.manacap", dob: "2003-10-04", statement: "Growth occurs outside your comfort zone.", ambition: "Commercial Banker", photo: "cielo.png", memories: ["cielo_memory1.png"] },
+      { id: 20, name: "CUMLA, Carl Vincent L.", facebook: "https://facebook.com/carl.vincent.cumla", dob: "2002-06-30", statement: "Master the fundamentals first.", ambition: "Stock Broker", photo: "carl.png", memories: ["carl_memory1.jpg"] },
+      { id: 21, name: "DANDASAN, Mia I.", facebook: "https://facebook.com/mia.hintapa.1", dob: "2003-07-11", statement: "Perseverance unlocks potential.", ambition: "Microfinance Manager", photo: "mia.png", memories: ["mia_memory1.png"] },
+      { id: 22, name: "EDUBOS, Khizia Mae A.", facebook: "https://facebook.com/search/top?q=Kzia%20Amora", dob: "2002-02-18", statement: "Believe in the process.", ambition: "Corporate Risk Director", photo: "khizia.png", memories: ["khizia_memory1.jpg"] },
+      { id: 23, name: "EJEM, Rovilen A.", facebook: "https://facebook.com/rvlnalcvrem09", dob: "2003-11-05", statement: "Consistency creates mastery.", ambition: "Financial Economist", photo: "rovilen.png", memories: ["rovilen_memory1.png"] },
+      { id: 24, name: "ENTRINA, Marcel Jane", facebook: "https://facebook.com/masang.entrina.9", dob: "2002-04-22", statement: "Lead with empathy and intellect.", ambition: "Cooperative Executive", photo: "marcel.png", memories: ["marcel_memory1.jpg"] },
+      { id: 25, name: "GO, Jaselle Van M.", facebook: "https://facebook.com/jasellevan.menciasgo", dob: "2003-03-14", statement: "Innovate to elevate.", ambition: "Financial Operations Manager", photo: "jaselle.png", memories: ["jaselle_memory1.png"] },
+      { id: 26, name: "GUMAPO, Ruby S.", facebook: "https://facebook.com/search/top?q=Ruby%20Gumapo", dob: "2002-09-01", statement: "Your legacy is built daily.", ambition: "Senior Credit Officer", photo: "ruby.png", memories: ["ruby_memory1.jpg"] },
+      { id: 27, name: "HACLAD, Angelyn S.", facebook: "https://facebook.com/angelyn.sanghiron.haclad.2025", dob: "2003-01-28", statement: "Adaptability is key to survival.", ambition: "Banking Compliance Officer", photo: "angelyn.png", memories: ["angelyn_memory1.png"] },
+      { id: 28, name: "IPOLAN, Krisha Bea L.", facebook: "https://facebook.com/krishabea.ipolan", dob: "2002-12-19", statement: "Courage is grace under pressure.", ambition: "Financial Planner", photo: "krisha.png", memories: ["krisha_memory1.jpg"] },
+      { id: 29, name: "LABITA, Lorie Jane M.", facebook: "https://facebook.com/search/top?q=Lorie%20Mangubat%20Labita", dob: "2003-08-07", statement: "Patience and persistence win.", ambition: "Corporate Auditor", photo: "lorie.png", memories: ["lorie_memory1.png"] },
+      { id: 30, name: "LARIBA, Clifford John L.", facebook: "https://facebook.com/ceejay.kiddo", dob: "2002-05-03", statement: "Turn obstacles into stepping stones.", ambition: "Quantitative Trader", photo: "clifford.png", memories: ["clifford_memory1.jpg"] },
+      { id: 31, name: "LAVIÑA, Marjorie C.", facebook: "https://facebook.com/marjorie.cabaluna.9", dob: "2003-04-16", statement: "Strive for meaningful impact.", ambition: "Insurance Underwriter", photo: "marjorie.png", memories: ["marjorie_memory1.png"] },
+      { id: 32, name: "MACARAYO, Diomar A.", facebook: "https://facebook.com/diomar.macarayo", dob: "2002-10-10", statement: "Disciplined execution yields results.", ambition: "Financial Strategist", photo: "diomar.png", memories: ["diomar_memory1.jpg"] },
+      { id: 33, name: "MOJELLO, Romil D.", facebook: "https://facebook.com/romel.mojillo.3", dob: "2003-02-24", statement: "Never settle for average.", ambition: "Investment Manager", photo: "romil.png", memories: ["romil_memory1.png"] },
+      { id: 34, name: "NACARIO, Ria Mae P.", facebook: "https://facebook.com/riamae.paboradanacario", dob: "2002-07-21", statement: "Grace, grit, and gratitude.", ambition: "Corporate Accountant", photo: "ria.png", memories: ["ria_memory1.jpg"] },
+      { id: 35, name: "OBASA, Pauladriane D.", facebook: "https://facebook.com/Lidarlord", dob: "2003-06-08", statement: "Master your discipline, dictate your future.", ambition: "Real Estate & Financial Executive", photo: "paul.png", memories: ["chok.jpg", "JGN.jpeg", "@.jpeg"] },
+      { id: 36, name: "PABAYO, Hezel Gwenn B.", facebook: "https://facebook.com/hezel.gwenn.batas.pabayo", dob: "2002-11-13", statement: "Excellence is not an act, but a habit.", ambition: "Financial Risk Manager", photo: "hezel.png", memories: ["hezel_memory1.png"] },
+      { id: 37, name: "PAGUNSAN, Nicole C.", facebook: "https://facebook.com/nicole.pagunsan.13", dob: "2003-09-30", statement: "Shine with confidence and wisdom.", ambition: "Equity Research Analyst", photo: "nicole.png", memories: ["nicole_memory1.jpg"] },
+      { id: 38, name: "PATALINGHUG, Syche R.", facebook: "https://facebook.com/syche.patalinghug.2024", dob: "2002-03-01", statement: "Success favors the prepared mind.", ambition: "Capital Markets Analyst", photo: "syche.png", memories: ["syche_memory1.png"] },
+      { id: 39, name: "PESIDAS, Clark James V.", facebook: "https://facebook.com/jamesclark127909120555", dob: "2003-05-17", statement: "Driven by passion and purpose.", ambition: "Corporate Financial Planner", photo: "clark.png", memories: ["clark_memory1.jpg"] },
+      { id: 40, name: "PUZON, Katrina Casandra Jean B.", facebook: "https://facebook.com/kc.puzon.98", dob: "2002-08-22", statement: "Create value wherever you go.", ambition: "Chief Risk Officer", photo: "katrina.png", memories: ["katrina_memory1.png"] },
+      { id: 41, name: "QUILATAN, Kurt Norej", facebook: "https://facebook.com/badboy45xd", dob: "2003-12-11", statement: "Focus on the end goal.", ambition: "Portfolio Strategist", photo: "kurt.png", memories: ["kurt_memory1.jpg"] },
+      { id: 42, name: "RABANES, Geneses C.", facebook: "https://facebook.com/geneses.rabanes.9", dob: "2002-01-29", statement: "Faith and fortitude lead the way.", ambition: "Financial Analyst", photo: "geneses.png", memories: ["geneses_memory1.png"] },
+      { id: 43, name: "RAMA, Christy Jane B.", facebook: "https://facebook.com/enajytrishc.baclasrama", dob: "2003-10-15", statement: "Lead with integrity and heart.", ambition: "Bank Operations Manager", photo: "christy.png", memories: ["christy_memory1.jpg"] },
+      { id: 44, name: "RAMOS, Louie Jay Mar V.", facebook: "https://facebook.com/louie0123456", dob: "2002-04-05", statement: "Build solutions that last.", ambition: "Financial Systems Consultant", photo: "louie.png", memories: ["louie_memory1.png"] },
+      { id: 45, name: "RASALLO, Andrea Mae P.", facebook: "https://facebook.com/andreamaerasallo.25", dob: "2003-06-27", statement: "Perseverance unlocks success.", ambition: "Credit Risk Specialist", photo: "andrea.png", memories: ["andrea_memory1.jpg"] },
+      { id: 46, name: "ROBLE, Grace Lyn O.", facebook: "https://facebook.com/grace.lyn.roble", dob: "2002-09-18", statement: "Strive to empower others.", ambition: "Microfinance Director", photo: "grace.png", memories: ["grace_memory1.png"] },
+      { id: 47, name: "SABAL, Essyl A.", facebook: "https://facebook.com/essyl.sabalcuu", dob: "2003-02-08", statement: "Confidence begins with preparation.", ambition: "Mutual Fund Controller", photo: "essyl.png", memories: ["essyl_memory1.jpg"] },
+      { id: 48, name: "TIBON, John Michael A.", facebook: "https://facebook.com/johnmichael.tibon", dob: "2002-07-03", statement: "Precision in every calculation.", ambition: "Financial Modeling Expert", photo: "john.png", memories: ["john_memory1.png"] },
+      { id: 49, name: "TUPAS, Rudel C.", facebook: "https://facebook.com/rudel.tupas", dob: "2003-11-20", statement: "Integrity over everything.", ambition: "Commercial Credit Officer", photo: "rudel.png", memories: ["rudel_memory1.jpg"] },
+      { id: 50, name: "UAYAN, Janters E.", facebook: "https://facebook.com/terjan2003", dob: "2002-05-25", statement: "Every step gets you closer.", ambition: "Corporate Risk Manager", photo: "janters.png", memories: ["janters_memory1.png"] },
+      { id: 51, name: "URBANO, Caroline N.", facebook: "https://facebook.com/caroline.urbano.77", dob: "2003-03-31", statement: "Wisdom guides prosperity.", ambition: "Investment Consultant", photo: "caroline.png", memories: ["caroline_memory1.jpg"] },
+      { id: 52, name: "ZAMAYLA, John Paul D.", facebook: "https://facebook.com/paul.zamayla.2024", dob: "2002-10-12", statement: "Execute with excellence.", ambition: "Fintech Product Manager", photo: "john.png", memories: ["john_paul_memory1.png"] },
+      { id: 53, name: "ZARATE, Daisybelle C.", facebook: "https://facebook.com/daisybelle.zarate95", dob: "2003-01-04", statement: "Grace and wisdom in all endeavors.", ambition: "Banking Manager", photo: "daisybelle.png", memories: ["daisybelle_memory1.jpg"] },
+      { id: 54, name: "PAILAGAO, Abbygail E.", facebook: "https://facebook.com/search/top?q=Abbygail%20Pailagao", dob: "2002-12-25", statement: "Diligence brings reward.", ambition: "Financial Controller", photo: "abbygail.png", memories: ["abbygail_memory1.png"] }
+    ];
+
+    // Lightbox / Image Pop-up Trigger Function
+    function popImage(imgUrl, captionText) {
+      const lightbox = document.getElementById('imageLightbox');
+      const targetImg = document.getElementById('lightboxTargetImg');
+      const caption = document.getElementById('lightboxCaption');
+
+      targetImg.src = imgUrl;
+      caption.textContent = captionText || 'Photo Preview';
+      lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('imageLightbox').classList.remove('active');
+    }
+
+    // Open Ring Designs Modal
+    function openRingDesigns() {
+      document.getElementById('modalTitle').textContent = `Official BSBA Signet Ring Designs`;
+      const body = document.getElementById('modalBody');
+
+      body.innerHTML = `
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Official graduation signet ring design options for Tagoloan Community College BSBA Financial Management Class of 2027.
+        </p>
+        <div class="media-gallery" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+          <div>
+            <img src="2.jpg" alt="Signet Ring Design 1" onclick="popImage(this.src, 'Tagoloan Community College BSBA Class of 2027 Signet Ring')" style="height: 220px;" />
+            <p style="text-align: center; font-size: 0.8rem; color: var(--primary-yellow); font-weight: 700; margin-top: 6px;">BSBA Class of 2027 Emblem Ring</p>
+          </div>
+          <div>
+            <img src="1.jpg" alt="Signet Ring Design 2" onclick="popImage(this.src, 'Oval Solid Signet Ring MS-002')" style="height: 220px;" />
+            <p style="text-align: center; font-size: 0.8rem; color: var(--primary-yellow); font-weight: 700; margin-top: 6px;">Oval Solid MS-002 Design</p>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('mainModal').classList.add('active');
+    }
+
+    // Dimension Navigation
+    function switchDimension(dimId, btnElement) {
+      document.querySelectorAll('.dimension').forEach(dim => dim.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      
+      const targetDim = document.getElementById(dimId);
+      if (targetDim) targetDim.classList.add('active');
+      if (btnElement) btnElement.classList.add('active');
+
+      document.getElementById('navLinks').classList.remove('active');
+      document.getElementById('burgerMenu').classList.remove('active');
+    }
+
+    // Burger Menu
+    document.getElementById('burgerMenu').addEventListener('click', function() {
+      this.classList.toggle('active');
+      document.getElementById('navLinks').classList.toggle('active');
+    });
+
+    // Clock and Daily Timetable
+    function updateClockAndSchedule() {
+      const now = new Date();
+      const clockEl = document.getElementById('liveClock');
+      if (clockEl) clockEl.textContent = now.toLocaleTimeString();
+
+      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const todayStr = dayNames[now.getDay()];
+
+      const todayClasses = sem1Schedule.filter(item => item.days.includes(todayStr));
+      const container = document.getElementById('todayScheduleList');
+
+      if (container) {
+        if (todayClasses.length === 0) {
+          container.innerHTML = `<div class="no-class-msg"><i class="fa-solid fa-calendar-check" style="color: var(--primary-yellow); font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i> No classes scheduled for today (${todayStr}). Rest well!</div>`;
+        } else {
+          container.innerHTML = todayClasses.map(item => `
+            <div class="today-class-item">
+              <div class="class-time"><i class="fa-regular fa-clock"></i> ${item.time}</div>
+              <div class="class-title">${item.code} - ${item.title}</div>
+              <div class="class-meta">
+                <span>Room: ${item.room}</span>
+                <span>${item.instructor}</span>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+    }
+    setInterval(updateClockAndSchedule, 1000);
+    updateClockAndSchedule();
+
+    // Activity Semester Filtering
+    function switchActivitySemester(semNum, btnEl) {
+      currentActivitySem = semNum;
+      const parentWrap = btnEl.parentElement;
+      parentWrap.querySelectorAll('.sem-tab-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+      renderActivities();
+    }
+
+    function renderActivities() {
+      const grid = document.getElementById('activitiesGrid');
+      if (!grid) return;
+
+      const filtered = activitiesData.filter(a => a.sem === currentActivitySem);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: var(--text-muted);">
+            <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: var(--primary-yellow); margin-bottom: 1rem; display: block;"></i>
+            <h3>No Activities Uploaded Yet for 2nd Semester</h3>
+            <p style="font-size: 0.88rem; margin-top: 0.5rem;">Check back once the 2nd semester courses commence.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(act => `
+        <div class="card" onclick="openMediaViewer(${act.id})">
+          <div>
+            <span class="subject-code">${act.code}</span>
+            <h3 class="card-title">${act.title}</h3>
+            <p class="card-desc">${act.desc}</p>
+          </div>
+          <div>
+            <div class="card-footer">
+              <span class="instructor-tag"><i class="fa-solid fa-user-tie"></i> ${act.instructor}</span>
+              <span class="view-btn-text"><i class="fa-solid fa-play"></i> View Media</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function mixActivities() {
+      activitiesData.sort(() => Math.random() - 0.5);
+      renderActivities();
+    }
+
+    function openMediaViewer(actId) {
+      const act = activitiesData.find(a => a.id === actId);
+      if (!act) return;
+
+      document.getElementById('modalTitle').textContent = `${act.code} Activity Media`;
+      const body = document.getElementById('modalBody');
+
+      let content = `<p style="color: var(--text-muted); font-size: 0.95rem;">${act.desc}</p>`;
+
+      if (act.photos && act.photos.length) {
+        content += `
+          <div>
+            <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--primary-yellow); text-transform: uppercase; margin-bottom: 0.8rem;"><i class="fa-solid fa-image"></i> Photos (.png, .jpg)</h4>
+            <div class="media-gallery">
+              ${act.photos.map(p => `<img src="${p}" alt="Activity Photo" onerror="this.src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop'" onclick="popImage(this.src, '${act.code} Photo')" />`).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      if (act.videos && act.videos.length) {
+        content += `
+          <div>
+            <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--primary-yellow); text-transform: uppercase; margin-bottom: 0.8rem;"><i class="fa-solid fa-video"></i> Video Clips (.mp4)</h4>
+            <div class="media-gallery">
+              ${act.videos.map(v => `<video controls src="${v}"></video>`).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      if (act.audios && act.audios.length) {
+        content += `
+          <div>
+            <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--primary-yellow); text-transform: uppercase; margin-bottom: 0.8rem;"><i class="fa-solid fa-music"></i> Audio Recordings (.wav)</h4>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              ${act.audios.map((a, i) => `
+                <div class="audio-card">
+                  <label><i class="fa-solid fa-volume-high"></i> Audio Clip ${i + 1} (${a})</label>
+                  <audio controls src="${a}"></audio>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      body.innerHTML = content;
+      document.getElementById('mainModal').classList.add('active');
+    }
+
+    // OPEN LARGE STUDENT DETAIL POP-UP MODAL
+    function openStudentPopup(studentId) {
+      const student = alumniList.find(s => s.id === studentId);
+      if (!student) return;
+
+      const parts = student.name.split(',');
+      const lastName = parts[0].trim();
+      const firstName = parts[1] ? parts[1].trim() : '';
+      const formattedName = `${firstName} ${lastName}`;
+      const avatarUrl = student.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(formattedName)}&background=1e293b&color=ffc800&bold=true&size=200`;
+
+      document.getElementById('modalTitle').textContent = `Student Profile`;
+      const body = document.getElementById('modalBody');
+
+      const memoriesHTML = student.memories && student.memories.length ? 
+        `<div class="media-gallery">${student.memories.map(m => `<img src="${m}" alt="Memory" onerror="this.src='https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=600'" onclick="popImage(this.src, '${formattedName}\\'s Memory Photo')" />`).join('')}</div>` : 
+        `<p style="color: var(--text-muted); font-size: 0.9rem; font-style: italic;">No memories uploaded yet for this student.</p>`;
+
+      body.innerHTML = `
+        <div class="student-popup-header">
+          <img src="${avatarUrl}" class="student-popup-avatar" alt="${formattedName}" />
+          <div class="student-popup-meta">
+            <h2>${formattedName}</h2>
+            <p>BSBA Financial Management</p>
+            <a href="${student.facebook}" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="padding: 6px 14px; font-size: 0.8rem;">
+              <i class="fa-brands fa-facebook-f" style="color: var(--primary-yellow);"></i> Facebook Profile
+            </a>
+          </div>
+        </div>
+
+        <div class="popup-info-group">
+          <span class="popup-info-label">Graduation Statement</span>
+          <p class="popup-info-value">"${student.statement}"</p>
+        </div>
+
+        <div class="popup-info-group">
+          <span class="popup-info-label">Ambition</span>
+          <p class="popup-info-value" style="font-style: normal; font-weight: 700;">${student.ambition}</p>
+        </div>
+
+        <div class="popup-info-group">
+          <span class="popup-info-label">Date of Birth</span>
+          <p class="popup-info-value" style="font-style: normal;">${student.dob}</p>
+        </div>
+
+        <div class="popup-info-group">
+          <span class="popup-info-label">1st to 4th Year Memories (.png / .jpg)</span>
+          ${memoriesHTML}
+        </div>
+      `;
+
+      document.getElementById('mainModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('mainModal').classList.remove('active');
+    }
+
+    // Class Slideshow logic
+    let currentSlide = 0;
+    function showSlide(index) {
+      const slides = document.querySelectorAll('.album-slide');
+      const dots = document.querySelectorAll('.slide-dot');
+      if (!slides.length) return;
+
+      if (index >= slides.length) currentSlide = 0;
+      else if (index < 0) currentSlide = slides.length - 1;
+      else currentSlide = index;
+
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === currentSlide));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+    }
+
+    function moveSlide(step) { showSlide(currentSlide + step); }
+    function setSlide(index) { showSlide(index); }
+    setInterval(() => moveSlide(1), 5000);
+
+    // Render Student Cards Grid
+    function renderAlumni() {
+      const container = document.querySelector('.alumni-grid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      alumniList.forEach((student) => {
+        const parts = student.name.split(',');
+        const lastName = parts[0].trim();
+        const firstName = parts[1] ? parts[1].trim() : '';
+        const formattedName = `${firstName} ${lastName}`;
+
+        const avatarUrl = student.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(formattedName)}&background=1e293b&color=ffc800&bold=true&size=128`;
+
+        const card = document.createElement('div');
+        card.className = 'alumni-card';
+        card.onclick = () => openStudentPopup(student.id);
+
+        card.innerHTML = `
+          <img src="${avatarUrl}" class="alumni-avatar" alt="${formattedName}" />
+          <h3 class="alumni-name">${formattedName}</h3>
+          <p class="alumni-role">BSBA Financial Management</p>
+          <span class="expand-btn"><i class="fa-solid fa-expand"></i> View Details</span>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Schedule Semester Rendering
+    function showScheduleSemester(semNum, btnEl) {
+      btnEl.parentElement.querySelectorAll('.sem-tab-btn').forEach(btn => btn.classList.remove('active'));
+      btnEl.classList.add('active');
+
+      const wrap = document.getElementById('scheduleWrap');
+      if (semNum === 1) {
+        wrap.innerHTML = `
+          <table class="schedule-table">
+            <thead>
+              <tr>
+                <th>Subject Code & Title</th>
+                <th>Day & Time</th>
+                <th>Room</th>
+                <th>Units</th>
+                <th>Instructor</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${sem1Schedule.map(s => `
+                <tr>
+                  <td><strong>${s.code}</strong><br><span style="color:var(--text-muted)">${s.title}</span></td>
+                  <td>${s.days} ${s.time}</td>
+                  <td><span class="room-badge">${s.room}</span></td>
+                  <td>${s.units}</td>
+                  <td>${s.instructor}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      } else {
+        wrap.innerHTML = `
+          <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-solid fa-calendar-xmark" style="font-size: 2.5rem; color: var(--primary-yellow); margin-bottom: 1rem; display: block;"></i>
+            <h3>No Schedules Available Yet</h3>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">2nd Semester timetable will be posted once officially released by the registrar.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Initial Load
+    document.addEventListener('DOMContentLoaded', () => {
+      renderActivities();
+      renderAlumni();
+      showScheduleSemester(1, document.querySelector('#dim-schedule .sem-tab-btn.active'));
+    });
+  </script>
+</body>
+</html>
